@@ -84,7 +84,7 @@ VALUES ('happy', 'https://pngtree.com/so/happy');
 INSERT INTO Users
 VALUES (null, 'Steve', 'Brownlee', 'steve@brownlee.com', 'Shark attack!', 'daddy_shark', 'steve', 'http://', '2021-10-25', 1);
 
-SELECT * FROM Users;
+SELECT * FROM Posts;
 
 INSERT INTO Posts 
 VALUES (null, 1, 2, "some content", '2021-10-25', "http://", "look at this", 1 );

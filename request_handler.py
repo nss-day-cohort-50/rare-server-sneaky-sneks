@@ -111,8 +111,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Initialize new...
         new_response = None
 
-        if resource == "register":
-            new_response = create_user(post_body)
+        if resource == "posts":
+            new_response = create_post(post_body)
 
         self.wfile.write(f"{new_response}".encode())
         # Encode the new dict and send in response
