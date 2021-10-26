@@ -2,6 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, create_user
 from posts import get_all_posts, create_post, get_posts_by_user
+from categories import get_all_categories, create_category
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -86,6 +87,8 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = f"{get_all_users()}"
             elif resource == "posts":
                 response = f'{get_posts_by_user(id)}'
+            elif resource == "categories":
+                response = f'{get_all_categories()}'
 
         # elif len(parsed) == 3:
         #     ( resource, id, term ) = parsed
@@ -113,6 +116,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource == "register":
             new_response = create_user(post_body)
+        elif resource == "categories":
+            new_response = create_category(post_body)
 
         self.wfile.write(f"{new_response}".encode())
         # Encode the new dict and send in response

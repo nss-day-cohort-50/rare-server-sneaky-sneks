@@ -76,6 +76,13 @@ CREATE TABLE "Categories" (
 
 INSERT INTO Categories ('label')
 VALUES ('News');
+INSERT INTO Categories ('label')
+VALUES ('Sports');
+INSERT INTO Categories ('label')
+VALUES ('Fiction');
+INSERT INTO Categories ('label')
+VALUES ('Biography');
+
 INSERT INTO Tags ('label')
 VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url')
@@ -103,3 +110,7 @@ SELECT p.id,
         JOIN Users u ON u.id = p.user_id
         WHERE p.user_id = 1;
 
+SELECT * FROM Categories;
+
+DELETE FROM Categories
+WHERE id > 4;
