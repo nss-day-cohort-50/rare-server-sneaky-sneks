@@ -96,7 +96,6 @@ def get_posts_by_user(id):
             posts.append(post.__dict__)
 
     # Use `json` package to properly serialize list as JSON
-<<<<<<< HEAD
     return json.dumps(posts)
 
 def get_post_by_id(postId):
@@ -127,6 +126,3 @@ def get_post_by_id(postId):
         
 
     return json.dumps(post.__dict__)
-=======
-    return json.dumps(posts)
->>>>>>> main
