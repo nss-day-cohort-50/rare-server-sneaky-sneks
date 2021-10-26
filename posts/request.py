@@ -97,3 +97,33 @@ def get_posts_by_user(id):
 
     # Use `json` package to properly serialize list as JSON
     return json.dumps(posts)
+    return json.dumps(posts)
+
+def get_post_by_id(postId):
+
+    with sqlite3.connect('./rare.db') as conn:
+        
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        SELECT p.id,
+        p.user_id,
+        p.category_id,
+        p.title,
+        p.publication_date,
+        p.image_url,
+        p.content,
+        p.approved
+        FROM Posts p
+        WHERE p.id = ?
+        """, ( postId, ))
+
+        data = db_cursor.fetchone()
+
+        post = Post(data['id'], data['user_id'], data['category_id'], data['title'],
+                data['publication_date'], data['image_url'], data['content'], data['approved'])
+
+        
+
+    return json.dumps(post.__dict__)
