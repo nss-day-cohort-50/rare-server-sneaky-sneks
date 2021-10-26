@@ -73,7 +73,6 @@ CREATE TABLE "Categories" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "label" varchar
 );
-
 INSERT INTO Categories ('label')
 VALUES ('News');
 INSERT INTO Categories ('label')
@@ -82,35 +81,76 @@ INSERT INTO Categories ('label')
 VALUES ('Fiction');
 INSERT INTO Categories ('label')
 VALUES ('Biography');
-
 INSERT INTO Tags ('label')
 VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url')
 VALUES ('happy', 'https://pngtree.com/so/happy');
-
+INSERT INTO Categories ('label')
+VALUES ('News');
+INSERT INTO Tags ('label')
+VALUES ('JavaScript');
+INSERT INTO Reactions ('label', 'image_url')
+VALUES ('happy', 'https://pngtree.com/so/happy');
+DELETE FROM Users
+WHERE id = 1;
+INSERT INTO Posts
+VALUES (
+        null,
+        1,
+        2,
+        "some content",
+        '2021-10-25',
+        "http://",
+        "look at this",
+        1
+    );
+SELECT *
+FROM Posts
+SELECT *
+FROM Users
 INSERT INTO Users
-VALUES (null, 'Steve', 'Brownlee', 'steve@brownlee.com', 'Shark attack!', 'daddy_shark', 'steve', 'http://', '2021-10-25', 1);
-
-SELECT * FROM Users;
-
-INSERT INTO Posts 
-VALUES (null, 1, 2, "some content", '2021-10-25', "http://", "look at this", 1 );
-
+VALUES (
+        1,
+        "Danny",
+        "Armstrong",
+        "danny@danny.com",
+        "I am Danny",
+        "danny@danny.com",
+        "123",
+        "http://",
+        "2021-10-26",
+        1
+    )
+SELECT *
+FROM Users;
+INSERT INTO Posts
+VALUES (
+        null,
+        1,
+        2,
+        "some content",
+        '2021-10-25',
+        "http://",
+        "look at this",
+        1
+    );
+    
 SELECT p.id,
-        p.user_id,
-        p.category_id,
-        p.title,
-        p.publication_date,
-        p.image_url,
-        p.content,
-        p.approved,
-        u.first_name,
-        u.last_name
-        FROM Posts p
-        JOIN Users u ON u.id = p.user_id
-        WHERE p.user_id = 1;
+    p.user_id,
+    p.category_id,
+    p.title,
+    p.publication_date,
+    p.image_url,
+    p.content,
+    p.approved,
+    u.first_name,
+    u.last_name
+FROM Posts p
+    JOIN Users u ON u.id = p.user_id
+WHERE p.user_id = 1;
 
-SELECT * FROM Categories;
+SELECT *
+FROM Categories;
 
 DELETE FROM Categories
 WHERE id > 4;

@@ -1,8 +1,9 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from models import post
 from users import get_all_users, create_user
-from posts import get_all_posts, create_post, get_posts_by_user
 from categories import get_all_categories, create_category
+from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -89,11 +90,12 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = f'{get_posts_by_user(id)}'
             elif resource == "categories":
                 response = f'{get_all_categories()}'
-
+            elif resource == "post":
+                response = f'{get_post_by_id(id)}'
         # elif len(parsed) == 3:
-        #     ( resource, id, term ) = parsed
-        #     if resource == 'entries':
-        #         response = get_entries_by_term(term)
+        #     ( resource, id, postId ) = parsed
+        #     if resource == 'posts':
+        #         response = get_post_by_id(postId)
         
         self.wfile.write(response.encode())
 
