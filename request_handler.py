@@ -2,6 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from models import post
 from users import get_all_users, create_user
+from categories import get_all_categories, create_category
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
 
 # Here's a class. It inherits from another class.
@@ -90,6 +91,10 @@ class HandleRequests(BaseHTTPRequestHandler):
             elif resource == "post":
                 response = f'{get_post_by_id(id)}'
 
+            elif resource == "categories":
+                response = f'{get_all_categories()}'
+            elif resource == "post":
+                response = f'{get_post_by_id(id)}'
         # elif len(parsed) == 3:
         #     ( resource, id, postId ) = parsed
         #     if resource == 'posts':
@@ -116,6 +121,10 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource == "posts":
             new_response = create_post(post_body)
+        if resource == "register":
+            new_response = create_user(post_body)
+        elif resource == "categories":
+            new_response = create_category(post_body)
 
         self.wfile.write(f"{new_response}".encode())
         # Encode the new dict and send in response
