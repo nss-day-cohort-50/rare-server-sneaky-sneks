@@ -1,6 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, create_user
+from posts import get_all_posts, create_post, get_posts_by_user
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -83,6 +84,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             ( resource, id ) = parsed
             if resource == "users":
                 response = f"{get_all_users()}"
+            elif resource == "posts":
+                response = f'{get_posts_by_user(id)}'
 
         # elif len(parsed) == 3:
         #     ( resource, id, term ) = parsed
