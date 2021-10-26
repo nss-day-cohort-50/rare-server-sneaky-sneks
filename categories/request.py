@@ -2,6 +2,7 @@ import sqlite3
 import json
 from models import Category
 
+
 def get_all_categories():
     # Open a connection to the database
     with sqlite3.connect("./rare.db") as conn:
@@ -15,6 +16,7 @@ def get_all_categories():
             """
         SELECT *
         FROM categories
+        ORDER BY label asc
         """
         )
 
@@ -33,13 +35,16 @@ def get_all_categories():
 def create_category(new_cat):
     with sqlite3.connect("./rare.db") as conn:
         db_cursor = conn.cursor()
-        db_cursor.execute("""
+        db_cursor.execute(
+            """
         INSERT INTO Categories
         (label)
         VALUES (?)
-        """, (new_cat['label'],))
+        """,
+            (new_cat["label"],),
+        )
 
         id = db_cursor.lastrowid
-        new_cat['id'] = id
+        new_cat["id"] = id
 
     return json.dumps(new_cat)
