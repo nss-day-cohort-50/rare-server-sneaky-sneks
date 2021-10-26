@@ -85,3 +85,21 @@ INSERT INTO Users
 VALUES (null, 'Steve', 'Brownlee', 'steve@brownlee.com', 'Shark attack!', 'daddy_shark', 'steve', 'http://', '2021-10-25', 1);
 
 SELECT * FROM Users;
+
+INSERT INTO Posts 
+VALUES (null, 1, 2, "some content", '2021-10-25', "http://", "look at this", 1 );
+
+SELECT p.id,
+        p.user_id,
+        p.category_id,
+        p.title,
+        p.publication_date,
+        p.image_url,
+        p.content,
+        p.approved,
+        u.first_name,
+        u.last_name
+        FROM Posts p
+        JOIN Users u ON u.id = p.user_id
+        WHERE p.user_id = 1;
+
