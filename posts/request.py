@@ -113,7 +113,12 @@ def get_post_by_id(postId):
         p.publication_date,
         p.image_url,
         p.content,
-        p.approved
+        p.approved,
+        c.id,
+        c.post_id,
+        c.author_id,
+        c.content,
+        c.created_on
         FROM Posts p
         WHERE p.id = ?
         """, ( postId, ))
