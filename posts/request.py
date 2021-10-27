@@ -1,9 +1,8 @@
 import sqlite3
 import json
 from sqlite3.dbapi2 import Date
-from models import Post, User
+from models import Post, User, Category
 from datetime import date
-
 
 def get_all_posts():
     # Open a connection to the database
@@ -16,8 +15,24 @@ def get_all_posts():
         # Write the SQL query to get the information you want
         db_cursor.execute(
             """
-        SELECT *
-        FROM Posts
+        SELECT
+        p.id,
+        p.user_id,
+        p.category_id,
+        p.title,
+        p.publication_date,
+        p.image_url,
+        p.content,
+        p.approved,
+        u.id u_id,
+        u.first_name,
+        u.last_name,
+        c.id cat_id,
+        c.label
+        FROM Posts p
+        JOIN users u on p.user_id = u_id
+        left JOIN categories c on p.category_id = c.id
+        ORDER BY publication_date desc
         """
         )
 
@@ -36,6 +51,21 @@ def get_all_posts():
                 row["content"],
                 row["approved"],
             )
+            user = User(
+                row["id"],
+                row["first_name"],
+                row["last_name"],
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            )
+            category = Category(row["id"], row["label"])
+            post.user = user.__dict__
+            post.category = category.__dict__
             posts.append(post.__dict__)
 
     # Use `json` package to properly serialize list as JSON
@@ -77,7 +107,8 @@ def get_posts_by_user(id):
         # Write the SQL query to get the information you want
         db_cursor.execute(
             """
-        SELECT p.id,
+        SELECT
+        p.id,
         p.user_id,
         p.category_id,
         p.title,
@@ -87,10 +118,14 @@ def get_posts_by_user(id):
         p.approved,
         u.id u_id,
         u.first_name,
-        u.last_name
+        u.last_name,
+        c.id cat_id,
+        c.label
         FROM Posts p
-        JOIN Users u ON u_id = p.user_id
+        JOIN users u on p.user_id = u_id
+        left JOIN categories c on p.category_id = c.id
         WHERE p.user_id = ?
+        ORDER BY publication_date desc
         """,
             (id,),
         )
@@ -121,8 +156,10 @@ def get_posts_by_user(id):
                 "",
                 "",
             )
+            category = Category(row["id"], row["label"])
 
             post.user = user.__dict__
+            post.category = category.__dict__
             posts.append(post.__dict__)
 
     # Use `json` package to properly serialize list as JSON
