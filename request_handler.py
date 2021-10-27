@@ -4,6 +4,7 @@ from models import post
 from users import get_all_users, create_user
 from categories import get_all_categories, create_category, update_category, delete_category
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
+from comments import create_comment
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -121,10 +122,12 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource == "posts":
             new_response = create_post(post_body)
-        if resource == "register":
+        elif resource == "register":
             new_response = create_user(post_body)
         elif resource == "categories":
             new_response = create_category(post_body)
+        elif resource == "comments":
+            new_response == create_comment(post_body)
 
         self.wfile.write(f"{new_response}".encode())
         # Encode the new dict and send in response

@@ -204,6 +204,8 @@ JOIN Users u ON u_id = p.user_id
 JOIN Comments c ON c_postId = p_id
 WHERE p_id = 1
 
+SELECT * FROM Users
+
 SELECT * FROM Comments
 
 INSERT INTO Comments

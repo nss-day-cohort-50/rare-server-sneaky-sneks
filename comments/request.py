@@ -32,6 +32,31 @@ def get_comment_by_post(postId):
     
     return json.dumps(comments)
 
+def create_comment(comment):
+    with sqlite3.connect('./rare.db') as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        INSERT INTO Comments
+                (post_id, author_id, content, created_on)
+            VALUES (?, ?, ?, ?)
+        """,
+                (comment['post_id'],
+                 comment['author_id'],
+                 comment['content'],
+                 date.today()
+                 )
+                 )
+
+        id = db_cursor.lastrowid
+        comment['id'] = id
+
+    return json.dumps(comment)
+
+
+
 
 
 
