@@ -97,7 +97,6 @@ def get_posts_by_user(id):
 
     # Use `json` package to properly serialize list as JSON
     return json.dumps(posts)
-    return json.dumps(posts)
 
 def get_post_by_id(postId):
 
@@ -107,23 +106,28 @@ def get_post_by_id(postId):
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
-        SELECT p.id,
+        SELECT p.id p_id,
         p.user_id,
         p.category_id,
         p.title,
         p.publication_date,
         p.image_url,
         p.content,
-        p.approved
+        p.approved,
+        u.id u_id,
+        u.first_name,
+        u.last_name
         FROM Posts p
-        WHERE p.id = ?
+        JOIN Users u on u_id = p.user_id
+        WHERE p_id = ?
         """, ( postId, ))
 
         data = db_cursor.fetchone()
 
-        post = Post(data['id'], data['user_id'], data['category_id'], data['title'],
+        post = Post(data['p_id'], data['user_id'], data['category_id'], data['title'],
                 data['publication_date'], data['image_url'], data['content'], data['approved'])
-
+        user = User(data['u_id'], data['first_name'], data['last_name'], '',
+                '', '', '', '', '', '')
         
-
-    return json.dumps(post.__dict__)
+        post.user = user.__dict__
+        return json.dumps(post.__dict__)

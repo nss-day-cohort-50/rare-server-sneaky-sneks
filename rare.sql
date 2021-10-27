@@ -177,7 +177,8 @@ FROM Posts p
 WHERE p.user_id = 1;
 
 SELECT *
-FROM Categories;
+FROM Posts;
 
-DELETE FROM Categories
-WHERE id > 4;
+DELETE FROM Posts
+WHERE id > 0;
+
