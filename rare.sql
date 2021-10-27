@@ -161,7 +161,6 @@ VALUES (
         1
     );
     
->>>>>>> 08ac0cdf4cba20c3c96ec6db887ec1801ac176b6
 SELECT p.id,
     p.user_id,
     p.category_id,
@@ -176,9 +175,23 @@ FROM Posts p
     JOIN Users u ON u.id = p.user_id
 WHERE p.user_id = 1;
 
-SELECT *
-FROM Posts;
-
 DELETE FROM Posts
 WHERE id > 0;
 
+SELECT
+p.id,
+p.user_id,
+p.title,
+p.publication_date,
+p.image_url,
+p.content,
+p.approved,
+u.id u_id,
+u.first_name,
+u.last_name,
+c.id cat_id,
+c.label
+FROM Posts p
+JOIN users u on p.user_id = u_id
+left JOIN categories c on p.category_id = c.id
+ORDER BY publication_date desc;

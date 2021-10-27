@@ -87,11 +87,12 @@ class HandleRequests(BaseHTTPRequestHandler):
             ( resource, id ) = parsed
             if resource == "users":
                 response = f"{get_all_users()}"
-            elif resource == "posts":
+            elif resource == "myposts":
                 response = f'{get_posts_by_user(id)}'
             elif resource == "post":
                 response = f'{get_post_by_id(id)}'
-
+            elif resource == "posts":
+                response = f'{get_all_posts()}'
             elif resource == "categories":
                 response = f'{get_all_categories()}'
             elif resource == "post":
