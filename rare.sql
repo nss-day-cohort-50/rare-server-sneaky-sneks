@@ -182,3 +182,30 @@ FROM Posts;
 DELETE FROM Posts
 WHERE id > 0;
 
+
+SELECT p.id p_id,
+p.user_id,
+p.category_id,
+p.title,
+p.publication_date,
+p.image_url,
+p.content,
+p.approved,
+u.id u_id,
+u.first_name,
+u.last_name,
+c.id c_id,
+c.post_id c_postId,
+c.author_id,
+c.content c_content,
+c.created_on
+FROM Posts p
+JOIN Users u ON u_id = p.user_id
+JOIN Comments c ON c_postId = p_id
+WHERE p_id = 1
+
+SELECT * FROM Comments
+
+INSERT INTO Comments
+VALUES (null, 1, 1, "Hi, Im a comment 3", "10-27-2021")
+
