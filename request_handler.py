@@ -1,10 +1,12 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from models import post
+from posts.request import delete_post
 from users import get_all_users, create_user
 from categories import get_all_categories, create_category, update_category, delete_category
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
 from tags import get_all_tags, create_tag, update_tag, delete_tag
+from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id, delete_post
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -172,6 +174,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             delete_category(id)
         elif resource == "tags":
             delete_tag(id)
+        elif resource == "posts":
+            delete_post(id)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
