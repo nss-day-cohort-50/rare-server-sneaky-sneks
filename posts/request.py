@@ -24,13 +24,13 @@ def get_all_posts():
         # Iterate list of data returned from database
         for row in dataset:
             post = Post(row['id'],
-                          row['user_id'],
-                          row['category_id'],
-                          row['title'],
-                          row['publication_date'],
-                          row['image_url'],
-                          row['content'],
-                          row['approved'])
+                        row['user_id'],
+                        row['category_id'],
+                        row['title'],
+                        row['publication_date'],
+                        row['image_url'],
+                        row['content'],
+                        row['approved'])
             posts.append(post.__dict__)
 
     # Use `json` package to properly serialize list as JSON
@@ -42,17 +42,17 @@ def create_post(post):
         db_cursor.execute("""
         INSERT INTO posts
             (user_id, category_id, title, publication_date, image_url, content, approved)
-        VALUES (?,?,?,?,?,?,?,?)
+        VALUES (?,?,?,?,?,?,?)
         """,
-                          (post['user_id'],
-                           post['category_id'],
-                           post['title'],
-                           post['publication_date'],
-                           post['image_url'],
-                           post['content'],
-                           post['approved']
-                           )
-                          )
+                (post['user_id'],
+                post['category_id'],
+                post['title'],
+                post['publication_date'],
+                post['image_url'],
+                post['content'],
+                post['approved']
+                )
+                )
 
         id = db_cursor.lastrowid
         post['id'] = id
@@ -106,7 +106,7 @@ def get_post_by_id(postId):
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
-        SELECT p.id,
+        SELECT p.id p_id,
         p.user_id,
         p.category_id,
         p.title,
@@ -114,20 +114,28 @@ def get_post_by_id(postId):
         p.image_url,
         p.content,
         p.approved,
+<<<<<<< HEAD
         c.id,
         c.post_id,
         c.author_id,
         c.content,
         c.created_on
+=======
+        u.id u_id,
+        u.first_name,
+        u.last_name
+>>>>>>> main
         FROM Posts p
-        WHERE p.id = ?
+        JOIN Users u on u_id = p.user_id
+        WHERE p_id = ?
         """, ( postId, ))
 
         data = db_cursor.fetchone()
 
-        post = Post(data['id'], data['user_id'], data['category_id'], data['title'],
+        post = Post(data['p_id'], data['user_id'], data['category_id'], data['title'],
                 data['publication_date'], data['image_url'], data['content'], data['approved'])
-
+        user = User(data['u_id'], data['first_name'], data['last_name'], '',
+                '', '', '', '', '', '')
         
-
-    return json.dumps(post.__dict__)
+        post.user = user.__dict__
+        return json.dumps(post.__dict__)

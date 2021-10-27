@@ -73,6 +73,32 @@ CREATE TABLE "Categories" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "label" varchar
 );
+<<<<<<< HEAD
+
+INSERT INTO Categories ('label') VALUES ('News');
+INSERT INTO Tags ('label') VALUES ('JavaScript');
+INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
+
+
+DELETE FROM Users WHERE id = 1;
+
+INSERT INTO Posts VALUES (null, 1, 2, "some content", '2021-10-25', "http://", "look at this", 1 );
+
+SELECT * FROM Posts
+
+SELECT * FROM Users
+
+<<<<<<< HEAD
+SELECT * FROM Posts;
+=======
+INSERT INTO Users VALUES (1, "Danny", "Armstrong", "danny@danny.com", "I am Danny", "danny@danny.com", "123", "http://", "2021-10-26", 1)
+SELECT * FROM Users;
+>>>>>>> 374d6c8c8723c8fcb46192c679d8f672559c43fb
+
+INSERT INTO Posts 
+VALUES (null, 1, 2, "some content", '2021-10-25', "http://", "look at this", 1 );
+
+=======
 INSERT INTO Categories ('label')
 VALUES ('News');
 INSERT INTO Categories ('label')
@@ -135,6 +161,7 @@ VALUES (
         1
     );
     
+>>>>>>> 08ac0cdf4cba20c3c96ec6db887ec1801ac176b6
 SELECT p.id,
     p.user_id,
     p.category_id,
@@ -150,7 +177,8 @@ FROM Posts p
 WHERE p.user_id = 1;
 
 SELECT *
-FROM Categories;
+FROM Posts;
 
-DELETE FROM Categories
-WHERE id > 4;
+DELETE FROM Posts
+WHERE id > 0;
+
