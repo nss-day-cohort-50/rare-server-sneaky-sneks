@@ -88,6 +88,9 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = f"{get_all_users()}"
             elif resource == "posts":
                 response = f'{get_posts_by_user(id)}'
+            elif resource == "post":
+                response = f'{get_post_by_id(id)}'
+
             elif resource == "categories":
                 response = f'{get_all_categories()}'
             elif resource == "post":
@@ -116,6 +119,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Initialize new...
         new_response = None
 
+        if resource == "posts":
+            new_response = create_post(post_body)
         if resource == "register":
             new_response = create_user(post_body)
         elif resource == "categories":
