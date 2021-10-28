@@ -1,7 +1,7 @@
 import sqlite3
 import json
 from sqlite3.dbapi2 import Date
-from models import Post, User, Category
+from models import Post, User, Category, Comment
 from datetime import date
 
 
@@ -186,15 +186,30 @@ def get_post_by_id(postId):
         p.approved,
         u.id u_id,
         u.first_name,
-        u.last_name
+        u.last_name,
+        c.id c_id,
+        c.post_id c_postId,
+        c.author_id,
+        c.content c_content,
+        c.created_on
         FROM Posts p
-        JOIN Users u on u_id = p.user_id
+        JOIN Users u ON u_id = p.user_id
+        JOIN Comments c ON c_postId = p.id
         WHERE p_id = ?
         """,
             (postId,),
         )
 
         data = db_cursor.fetchone()
+
+        comment_data = db_cursor.fetchall()
+        comments = []
+
+        for row in comment_data:
+            comment = Comment(row['c_id'], row['c_postId'],
+            row['author_id'], row['c_content'], row['created_on'])
+
+            comments.append(comment.__dict__)
 
         post = Post(
             data["p_id"],
@@ -220,6 +235,7 @@ def get_post_by_id(postId):
         )
 
         post.user = user.__dict__
+        post.comments = comments
         return json.dumps(post.__dict__)
 
 
