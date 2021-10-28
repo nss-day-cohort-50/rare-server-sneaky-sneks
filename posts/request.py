@@ -96,6 +96,15 @@ def create_post(post):
         id = db_cursor.lastrowid
         post["id"] = id
 
+        for tag in post['tagIds']:
+            db_cursor.execute("""
+            INSERT INTO PostTags
+                (post_id, tag_id)
+                VALUES (?, ?)
+            """, (id, tag))
+
+            
+
     return json.dumps(post)
 
 
@@ -186,7 +195,7 @@ def get_post_by_id(postId):
         p.approved,
         u.id u_id,
         u.first_name,
-        u.last_name
+        u.last_name,
         FROM Posts p
         JOIN Users u on u_id = p.user_id
         WHERE p_id = ?

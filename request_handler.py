@@ -1,5 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from post_tags.request import get_all_post_tags
 from models import post
 from posts.request import delete_post
 from users import get_all_users, create_user
@@ -112,6 +113,8 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = f"{get_post_by_id(id)}"
             elif resource == "tags":
                 response = f"{get_all_tags()}"
+            elif resource == "postTags":
+                response = f"{get_all_post_tags()}"
         # elif len(parsed) == 3:
         #     ( resource, id, postId ) = parsed
         #     if resource == 'posts':

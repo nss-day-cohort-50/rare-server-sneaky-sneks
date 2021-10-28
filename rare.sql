@@ -195,3 +195,5 @@ FROM Posts p
 JOIN users u on p.user_id = u_id
 left JOIN categories c on p.category_id = c.id
 ORDER BY publication_date desc;
+
+SELECT * FROM PostTags

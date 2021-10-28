@@ -14,8 +14,13 @@ def get_all_post_tags():
         # Write the SQL query to get the information you want
         db_cursor.execute(
             """
-        SELECT *
-        FROM postTags
+        SELECT pt.id pt_id,
+        pt.post_id,
+        pt.tag_id
+        t.id t_id,
+        t.label
+        FROM postTags pt
+        JOIN Tags t on t_id = pt.tag_id
         """
         )
 
