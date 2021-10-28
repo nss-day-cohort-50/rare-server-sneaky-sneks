@@ -11,6 +11,7 @@ from categories import (
     delete_category,
 )
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
+from comments import create_comment
 from tags import get_all_tags, create_tag, update_tag, delete_tag
 from posts import (
     get_all_posts,
@@ -141,10 +142,12 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource == "posts":
             new_response = create_post(post_body)
-        if resource == "register":
+        elif resource == "register":
             new_response = create_user(post_body)
         elif resource == "categories":
             new_response = create_category(post_body)
+        elif resource == "comments":
+            new_response == create_comment(post_body)
         elif resource == "tags":
             new_response = create_tag(post_body)
 
