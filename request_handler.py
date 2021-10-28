@@ -4,6 +4,8 @@ from models import post
 from posts.request import delete_post
 from users import get_all_users, create_user
 from categories import get_all_categories, create_category, update_category, delete_category
+from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
+from tags import get_all_tags, create_tag, update_tag, delete_tag
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id, delete_post
 
 # Here's a class. It inherits from another class.
@@ -97,6 +99,8 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = f'{get_all_categories()}'
             elif resource == "post":
                 response = f'{get_post_by_id(id)}'
+            elif resource == "tags":
+                response = f'{get_all_tags()}'
         # elif len(parsed) == 3:
         #     ( resource, id, postId ) = parsed
         #     if resource == 'posts':
@@ -127,6 +131,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_response = create_user(post_body)
         elif resource == "categories":
             new_response = create_category(post_body)
+        elif resource == 'tags':
+            new_response = create_tag(post_body)
 
         self.wfile.write(f"{new_response}".encode())
         # Encode the new dict and send in response
@@ -149,7 +155,12 @@ class HandleRequests(BaseHTTPRequestHandler):
                 self._set_headers(204)
             else:
                 self._set_headers(404)
-
+        elif resource == "tags":
+            was_updated = update_tag(id, post_body)
+            if was_updated:
+                self._set_headers(204)
+            else:
+                self._set_headers(404)
         # self.wfile.write("".encode())
 
     def do_DELETE(self):
@@ -162,6 +173,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Delete a single animal from the list
         if resource == "categories":
             delete_category(id)
+        elif resource == "tags":
+            delete_tag(id)
         elif resource == "posts":
             delete_post(id)
 
