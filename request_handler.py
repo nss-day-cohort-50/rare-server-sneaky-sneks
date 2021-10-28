@@ -1,21 +1,36 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from models import post
+from posts.request import delete_post
 from users import get_all_users, create_user
-from categories import get_all_categories, create_category, update_category, delete_category
+from categories import (
+    get_all_categories,
+    create_category,
+    update_category,
+    delete_category,
+)
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
 from comments import create_comment
+from tags import get_all_tags, create_tag, update_tag, delete_tag
+from posts import (
+    get_all_posts,
+    create_post,
+    get_posts_by_user,
+    get_post_by_id,
+    delete_post,
+    update_post,
+)
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
 # work together for a common purpose. In this case, that
 # common purpose is to respond to HTTP requests from a client.
 
+
 class HandleRequests(BaseHTTPRequestHandler):
     # This is a Docstring it should be at the beginning of all classes and functions
     # It gives a description of the class or function
-    """Controls the functionality of any GET, PUT, POST, DELETE requests to the server
-    """
+    """Controls the functionality of any GET, PUT, POST, DELETE requests to the server"""
 
     # Here's a class function
     def _set_headers(self, status):
@@ -27,20 +42,19 @@ class HandleRequests(BaseHTTPRequestHandler):
             status (number): the status code to return to the front end
         """
         self.send_response(status)
-        self.send_header('Content-type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header("Content-type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
 
     # Another method! This supports requests with the OPTIONS verb.
     def do_OPTIONS(self):
-        """Sets the options headers
-        """
+        """Sets the options headers"""
         self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods',
-                         'GET, POST, PUT, DELETE')
-        self.send_header('Access-Control-Allow-Headers',
-                         'X-Requested-With, Content-Type, Accept')
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+        self.send_header(
+            "Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept"
+        )
         self.end_headers()
 
     def parse_url(self, path):
@@ -53,10 +67,10 @@ class HandleRequests(BaseHTTPRequestHandler):
         id = None
 
         # http://localhost:8088/entries?q=${searchTerm}
-        if '?' in resource:
-            param = resource.split('?')[1] # q=${searchTerm}
-            resource = resource.split('?')[0]
-            term = param.split('=')[1]
+        if "?" in resource:
+            param = resource.split("?")[1]  # q=${searchTerm}
+            resource = resource.split("?")[0]
+            term = param.split("=")[1]
             return (resource, id, term)
 
         else:
@@ -81,34 +95,37 @@ class HandleRequests(BaseHTTPRequestHandler):
         self._set_headers(200)
         response = {}  # Default response
         parsed = self.parse_url(self.path)
-        
+
         # Parse the URL and capture the tuple that is returned
         if len(parsed) == 2:
-            ( resource, id ) = parsed
+            (resource, id) = parsed
             if resource == "users":
                 response = f"{get_all_users()}"
+            elif resource == "myposts":
+                response = f"{get_posts_by_user(id)}"
+            elif resource == "post":
+                response = f"{get_post_by_id(id)}"
             elif resource == "posts":
-                response = f'{get_posts_by_user(id)}'
-            elif resource == "post":
-                response = f'{get_post_by_id(id)}'
-
+                response = f"{get_all_posts()}"
             elif resource == "categories":
-                response = f'{get_all_categories()}'
+                response = f"{get_all_categories()}"
             elif resource == "post":
-                response = f'{get_post_by_id(id)}'
+                response = f"{get_post_by_id(id)}"
+            elif resource == "tags":
+                response = f"{get_all_tags()}"
         # elif len(parsed) == 3:
         #     ( resource, id, postId ) = parsed
         #     if resource == 'posts':
         #         response = get_post_by_id(postId)
-        
+
         self.wfile.write(response.encode())
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
     def do_POST(self):
-        '''Posts'''
+        """Posts"""
         self._set_headers(201)
-        content_len = int(self.headers.get('content-length', 0))
+        content_len = int(self.headers.get("content-length", 0))
         post_body = self.rfile.read(content_len)
 
         # Convert JSON string to a Python dictionary
@@ -128,6 +145,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_response = create_category(post_body)
         elif resource == "comments":
             new_response == create_comment(post_body)
+        elif resource == "tags":
+            new_response = create_tag(post_body)
 
         self.wfile.write(f"{new_response}".encode())
         # Encode the new dict and send in response
@@ -137,7 +156,7 @@ class HandleRequests(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         self._set_headers(204)
-        content_len = int(self.headers.get('content-length', 0))
+        content_len = int(self.headers.get("content-length", 0))
         post_body = self.rfile.read(content_len)
         post_body = json.loads(post_body)
 
@@ -150,7 +169,18 @@ class HandleRequests(BaseHTTPRequestHandler):
                 self._set_headers(204)
             else:
                 self._set_headers(404)
-
+        elif resource == "tags":
+            was_updated = update_tag(id, post_body)
+            if was_updated:
+                self._set_headers(204)
+            else:
+                self._set_headers(404)
+        elif resource == "posts":
+            was_updated = update_post(post_body, id)
+            if was_updated:
+                self._set_headers(204)
+            else:
+                self._set_headers(404)
         # self.wfile.write("".encode())
 
     def do_DELETE(self):
@@ -163,6 +193,10 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Delete a single animal from the list
         if resource == "categories":
             delete_category(id)
+        elif resource == "tags":
+            delete_tag(id)
+        elif resource == "posts":
+            delete_post(id)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
@@ -171,9 +205,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 # This function is not inside the class. It is the starting
 # point of this application.
 def main():
-    """Starts the server on port 8088 using the HandleRequests class
-    """
-    host = ''
+    """Starts the server on port 8088 using the HandleRequests class"""
+    host = ""
     port = 8088
     HTTPServer((host, port), HandleRequests).serve_forever()
 
