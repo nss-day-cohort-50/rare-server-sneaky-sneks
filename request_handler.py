@@ -1,3 +1,4 @@
+from comments.request import delete_comment
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from models import post
@@ -10,7 +11,7 @@ from categories import (
     delete_category,
 )
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
-from comments import create_comment
+from comments import create_comment, delete_comment
 from tags import get_all_tags, create_tag, update_tag, delete_tag
 from posts import (
     get_all_posts,
@@ -197,6 +198,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             delete_tag(id)
         elif resource == "posts":
             delete_post(id)
+        elif resource == "comments":
+            delete_comment(id)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())

@@ -55,6 +55,18 @@ def create_comment(comment):
 
     return json.dumps(comment)
 
+def delete_comment(commentId):
+    with sqlite3.connect('./rare.db') as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM Comments
+        WHERE id = ?
+        """, (commentId, ))
+
+
 
 
 
