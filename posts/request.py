@@ -4,6 +4,7 @@ from sqlite3.dbapi2 import Date
 from models import Post, User, Category
 from datetime import date
 
+
 def get_all_posts():
     # Open a connection to the database
     with sqlite3.connect("./rare.db") as conn:
@@ -232,3 +233,37 @@ def delete_post(id):
         """,
             (id,),
         )
+
+
+def update_post(new_post, id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute(
+            """
+        Update posts
+        Set user_id = ?,
+        category_id = ?,
+        title = ?,
+        publication_date = ?,
+        image_url = ?,
+        content = ?,
+        approved = ?
+        WHERE id = ?
+        """,
+            (
+                new_post["user_id"],
+                new_post["category_id"],
+                new_post["title"],
+                new_post["publication_date"],
+                new_post["image_url"],
+                new_post["content"],
+                new_post["approved"],
+                id,
+            ),
+        )
+        was_updated = db_cursor.rowcount
+
+        if was_updated:
+            return True
+        else:
+            return False
