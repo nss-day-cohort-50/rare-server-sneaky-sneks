@@ -240,3 +240,15 @@ SELECT pt.id pt_id,
         JOIN Tags t on t_id = pt.tag_id
     
 
+ALTER TABLE Users
+ADD is_staff bit;
+
+select * from Posts
+where approved = 0 or approved = 1;
+
+UPDATE Users
+SET is_staff = 0;
+
+UPDATE Users
+SET is_staff = 1
+WHERE id = 1;
