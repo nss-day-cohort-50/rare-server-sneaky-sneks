@@ -195,4 +195,48 @@ JOIN users u on p.user_id = u_id
 left JOIN categories c on p.category_id = c.id
 ORDER BY publication_date desc;
 
-SELECT * FROM PostTags
+SELECT * FROM postTags;
+
+SELECT pt.id pt_id,
+        pt.post_id,
+        pt.tag_id,
+        t.id t_id,
+        t.label
+        FROM postTags pt
+        JOIN Tags t on t_id = pt.tag_id;
+
+ALTER TABLE Comments 
+ADD created_on date;
+
+SELECT p.id p_id,
+        p.user_id,
+        p.category_id,
+        p.title,
+        p.publication_date,
+        p.image_url,
+        p.content,
+        p.approved,
+        u.id u_id,
+        u.first_name,
+        u.last_name,
+        c.id c_id,
+        c.post_id c_postId,
+        c.author_id,
+        c.content c_content,
+        c.created_on
+        FROM Posts p
+        JOIN Users u ON u_id = p.user_id
+        LEFT JOIN Comments c ON c_postId = p.id
+        WHERE p_id = 44;
+
+SELECT * from posts;
+
+SELECT pt.id pt_id,
+        pt.post_id,
+        pt.tag_id,
+        t.id t_id,
+        t.label
+        FROM postTags pt
+        JOIN Tags t on t_id = pt.tag_id
+    
+

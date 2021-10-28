@@ -203,7 +203,7 @@ def get_post_by_id(postId):
         c.created_on
         FROM Posts p
         JOIN Users u ON u_id = p.user_id
-        JOIN Comments c ON c_postId = p.id
+        LEFT JOIN Comments c ON c_postId = p.id
         WHERE p_id = ?
         """,
             (postId,),
