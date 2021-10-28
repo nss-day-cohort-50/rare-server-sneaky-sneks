@@ -32,7 +32,7 @@ def get_all_posts():
         c.label
         FROM Posts p
         JOIN users u on p.user_id = u_id
-        left JOIN categories c on p.category_id = c.id
+        LEFT JOIN categories c on p.category_id = c.id
         ORDER BY publication_date desc
         """
         )
@@ -56,6 +56,77 @@ def get_all_posts():
                 row["id"],
                 row["first_name"],
                 row["last_name"],
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            )
+            category = Category(row["id"], row["label"])
+            post.user = user.__dict__
+            post.category = category.__dict__
+            posts.append(post.__dict__)
+
+    # Use `json` package to properly serialize list as JSON
+    return json.dumps(posts)
+
+
+def get_approved_posts():
+    # Open a connection to the database
+    with sqlite3.connect("./rare.db") as conn:
+
+        # Just use these. It's a Black Box.
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+        SELECT
+        p.id,
+        p.user_id,
+        p.category_id,
+        p.title,
+        p.publication_date,
+        p.image_url,
+        p.content,
+        p.approved,
+        u.id u_id,
+        u.first_name,
+        u.last_name,
+        c.id cat_id,
+        c.label
+        FROM Posts p
+        JOIN users u on p.user_id = u_id
+        left JOIN categories c on p.category_id = c.id
+        WHERE p.approved = 1
+        ORDER BY publication_date desc
+        """
+        )
+
+        dataset = db_cursor.fetchall()
+        posts = []
+
+        # Iterate list of data returned from database
+        for row in dataset:
+            post = Post(
+                row["id"],
+                row["user_id"],
+                row["category_id"],
+                row["title"],
+                row["publication_date"],
+                row["image_url"],
+                row["content"],
+                row["approved"],
+            )
+            user = User(
+                row["id"],
+                row["first_name"],
+                row["last_name"],
+                "",
                 "",
                 "",
                 "",
@@ -156,6 +227,7 @@ def get_posts_by_user(id):
                 "",
                 "",
                 "",
+                "",
             )
             category = Category(row["id"], row["label"])
 
@@ -194,7 +266,7 @@ def get_post_by_id(postId):
         c.created_on
         FROM Posts p
         JOIN Users u ON u_id = p.user_id
-        JOIN Comments c ON c_postId = p.id
+        LEFT JOIN Comments c ON c_postId = p.id
         WHERE p_id = ?
         """,
             (postId,),
@@ -206,8 +278,13 @@ def get_post_by_id(postId):
         comments = []
 
         for row in comment_data:
-            comment = Comment(row['c_id'], row['c_postId'],
-            row['author_id'], row['c_content'], row['created_on'])
+            comment = Comment(
+                row["c_id"],
+                row["c_postId"],
+                row["author_id"],
+                row["c_content"],
+                row["created_on"],
+            )
 
             comments.append(comment.__dict__)
 
@@ -225,6 +302,7 @@ def get_post_by_id(postId):
             data["u_id"],
             data["first_name"],
             data["last_name"],
+            "",
             "",
             "",
             "",

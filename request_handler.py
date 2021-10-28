@@ -1,8 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from models import post
-from posts.request import delete_post
-from users import get_all_users, create_user
+from users import get_all_users, create_user, get_current_user
 from categories import (
     get_all_categories,
     create_category,
@@ -19,6 +18,7 @@ from posts import (
     get_post_by_id,
     delete_post,
     update_post,
+    get_approved_posts,
 )
 
 # Here's a class. It inherits from another class.
@@ -101,16 +101,18 @@ class HandleRequests(BaseHTTPRequestHandler):
             (resource, id) = parsed
             if resource == "users":
                 response = f"{get_all_users()}"
+            elif resource == "user":
+                response = f"{get_current_user(id)}"
             elif resource == "myposts":
                 response = f"{get_posts_by_user(id)}"
             elif resource == "post":
                 response = f"{get_post_by_id(id)}"
-            elif resource == "posts":
+            elif resource == "allposts":
                 response = f"{get_all_posts()}"
+            elif resource == "posts":
+                response = f"{get_approved_posts()}"
             elif resource == "categories":
                 response = f"{get_all_categories()}"
-            elif resource == "post":
-                response = f"{get_post_by_id(id)}"
             elif resource == "tags":
                 response = f"{get_all_tags()}"
         # elif len(parsed) == 3:
