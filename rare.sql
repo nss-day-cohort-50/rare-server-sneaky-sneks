@@ -177,3 +177,33 @@ WHERE p.user_id = 1;
 DELETE FROM Posts
 WHERE id > 0;
 
+SELECT
+p.id,
+p.user_id,
+p.title,
+p.publication_date,
+p.image_url,
+p.content,
+p.approved,
+u.id u_id,
+u.first_name,
+u.last_name,
+c.id cat_id,
+c.label
+FROM Posts p
+JOIN users u on p.user_id = u_id
+left JOIN categories c on p.category_id = c.id
+ORDER BY publication_date desc;
+
+ALTER TABLE Users
+ADD is_staff bit;
+
+select * from Posts
+where approved = 0 or approved = 1;
+
+UPDATE Users
+SET is_staff = 0;
+
+UPDATE Users
+SET is_staff = 1
+WHERE id = 1;
