@@ -167,6 +167,15 @@ def create_post(post):
         id = db_cursor.lastrowid
         post["id"] = id
 
+        for tag in post['tagIds']:
+            db_cursor.execute("""
+            INSERT INTO PostTags
+                (post_id, tag_id)
+                VALUES (?, ?)
+            """, (id, tag))
+
+            
+
     return json.dumps(post)
 
 

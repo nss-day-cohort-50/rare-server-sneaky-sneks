@@ -1,5 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from post_tags.request import get_all_post_tags, get_tags_by_post_id
 from models import post
 from users import get_all_users, create_user, get_current_user
 from categories import (
@@ -10,7 +11,7 @@ from categories import (
 )
 from posts import get_all_posts, create_post, get_posts_by_user, get_post_by_id
 from comments import create_comment
-from tags import get_all_tags, create_tag, update_tag, delete_tag
+from tags import get_all_tags, create_tag, update_tag, delete_tag, update_tag
 from posts import (
     get_all_posts,
     create_post,
@@ -115,6 +116,10 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = f"{get_all_categories()}"
             elif resource == "tags":
                 response = f"{get_all_tags()}"
+            elif resource == "postTags":
+                response = f"{get_all_post_tags()}"
+            elif resource == "tagsbypost":
+                response = f'{get_tags_by_post_id(id)}'
         # elif len(parsed) == 3:
         #     ( resource, id, postId ) = parsed
         #     if resource == 'posts':
