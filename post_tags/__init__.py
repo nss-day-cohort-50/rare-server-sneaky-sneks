@@ -1,1 +1,1 @@
-from .request import get_all_post_tags, create_post_tag
+from .request import get_all_post_tags, create_post_tag, get_tags_by_post_id, update_tag

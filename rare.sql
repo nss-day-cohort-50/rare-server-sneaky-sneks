@@ -229,7 +229,7 @@ SELECT p.id p_id,
         LEFT JOIN Comments c ON c_postId = p.id
         WHERE p_id = 44;
 
-SELECT * from posts;
+SELECT * from tags;
 
 SELECT pt.id pt_id,
         pt.post_id,
@@ -252,3 +252,11 @@ SET is_staff = 0;
 UPDATE Users
 SET is_staff = 1
 WHERE id = 1;
+
+
+SELECT 
+pt.id,
+pt.post_id,
+pt.tag_id
+FROM PostTags pt
+Where post_id = 40;

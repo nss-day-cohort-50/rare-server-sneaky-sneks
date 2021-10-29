@@ -55,3 +55,40 @@ def create_post_tag(new_post_tag):
 
     return json.dumps(new_post_tag)
 
+def get_tags_by_post_id(postId):
+    with sqlite3.connect('./rare.db') as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        SELECT 
+            pt.id,
+            pt.post_id,
+            pt.tag_id
+        FROM PostTags pt
+        Where post_id = ?
+        """, (postId,))
+
+        tags=[]
+        data = db_cursor.fetchall()
+        for row in data:
+            tag = Post_Tag(row['id'], row['post_id'], row['tag_id'])
+            tags.append(tag.__dict__)
+    return json.dumps(tags)
+
+def update_tag(id, new_tag):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute(
+            """
+        Update PostTags
+        SET tag_id = ?
+        WHERE id = ?
+        """,
+            (new_tag["tag_id"], id),
+        )
+        was_updated = db_cursor.rowcount
+
+        if was_updated:
+            return True
+        else:
+            return False
